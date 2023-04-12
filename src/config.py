@@ -5,6 +5,9 @@ class ConfigMenu(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
 
+        self.resizable(width=False, height=False)
+        self.attributes("-topmost", "true")
+
         screenSize = (self.winfo_screenwidth(), self.winfo_screenheight())
 
         resolutions = ["2560x1440", "1920x1080", "1280x720", "1138x640", "1024x768", "1024x576", "960x720", "960x540", "800x600", "640x480", "640x360", "600x480", "512x384", "400x300", "320x256", "320x240"]
@@ -40,5 +43,8 @@ class ConfigMenu(tk.Tk):
             self.__resolutionDropDown.configure(state="disabled")
         
         self.after(1, self.__windowedEnabled)
+    
+    def __playFunction(self):
+        pass
 
 ConfigMenu()
