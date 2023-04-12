@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from os import makedirs, getcwd, path
 
 class ConfigMenu(tk.Tk):
     def __init__(self) -> None:
@@ -8,10 +9,10 @@ class ConfigMenu(tk.Tk):
         self.resizable(width=False, height=False)
         self.attributes("-topmost", "true")
 
-        screenSize = (self.winfo_screenwidth(), self.winfo_screenheight())
+        self.__screenSize = (self.winfo_screenwidth(), self.winfo_screenheight())
 
         resolutions = ["2560x1440", "1920x1080", "1280x720", "1138x640", "1024x768", "1024x576", "960x720", "960x540", "800x600", "640x480", "640x360", "600x480", "512x384", "400x300", "320x256", "320x240"]
-        compatRes = [res for res in resolutions if int(res.split("x")[0]) <= screenSize[0]]
+        compatRes = [res for res in resolutions if int(res.split("x")[0]) <= self.__screenSize[0]]
 
         self.__resolution = tk.StringVar(self)
         self.__windowed = tk.IntVar(self)
@@ -29,7 +30,7 @@ class ConfigMenu(tk.Tk):
         graphicsLabel.grid(row=1, column=0)
         self.__graphicsDropDown.grid(row=1, column=1)
 
-        ttk.Button(self, text="Play!").grid(row=2, column=2)
+        ttk.Button(self, text="Play!", command=self.__playFunction).grid(row=2, column=2)
         ttk.Button(self, text="Quit", command=self.destroy).grid(row=2, column=3)
 
         self.after(1, self.__windowedEnabled)
@@ -45,6 +46,15 @@ class ConfigMenu(tk.Tk):
         self.after(1, self.__windowedEnabled)
     
     def __playFunction(self):
-        pass
+        makedirs(path.join(getcwd(), "config"))
+        with open("config/display.ini", "w") as file:
+            file.write(str(self.__windowed.get())+"\n")
+            if self.__windowed.get():
+                file.write(self.__resolution.get().split("x")[0]+"\n")
+                file.write(self.__resolution.get().split("x")[1]+"\n")
+            else:
+                file.write(str(self.__screenSize[0])+"\n")
+                file.write(str(self.__screenSize[1])+"\n")
+            file.write(self.__graphics.get())
 
 ConfigMenu()
