@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from os import makedirs, getcwd, path
+import os
 
 class ConfigMenu(tk.Tk):
-    def __init__(self) -> None:
+    def __init__(self, title) -> None:
         super().__init__()
 
         self.resizable(width=False, height=False)
@@ -19,10 +19,10 @@ class ConfigMenu(tk.Tk):
         self.__graphics = tk.StringVar(self)
 
         resolutionLabel = ttk.Label(self, text="Screen resolution")
-        self.__resolutionDropDown = ttk.Combobox(self, state="disabled", values=compatRes)
+        self.__resolutionDropDown = ttk.Combobox(self, state="disabled", textvariable=self.__resolution, values=compatRes)
         self.__windowedCheckButton = ttk.Checkbutton(self, text="Windowed", variable=self.__windowed)
         graphicsLabel = ttk.Label(self, text="Graphics quality")
-        self.__graphicsDropDown = ttk.Combobox(self, state="readonly", values=["High", "Medium", "Low"])
+        self.__graphicsDropDown = ttk.Combobox(self, state="readonly", textvariable=self.__graphics, values=["High", "Medium", "Low"])
 
         resolutionLabel.grid(row=0, column=0)
         self.__resolutionDropDown.grid(row=0, column=1)
@@ -45,8 +45,12 @@ class ConfigMenu(tk.Tk):
         
         self.after(1, self.__windowedEnabled)
     
-    def __playFunction(self):
-        makedirs(path.join(getcwd(), "config"))
+    def __playFunction(self) -> None:
+        path = os.path.join(os.getcwd(), "config")
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         with open("config/display.ini", "w") as file:
             file.write(str(self.__windowed.get())+"\n")
             if self.__windowed.get():
