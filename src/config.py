@@ -61,4 +61,5 @@ class ConfigMenu(tk.Tk):
                 file.write(str(self.__screenSize[1])+"\n")
             file.write(self.__graphics.get())
 
-ConfigMenu()
+if __name__ == "__main__":
+    ConfigMenu("Example Setup Box")
