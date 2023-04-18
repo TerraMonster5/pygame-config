@@ -61,5 +61,12 @@ class ConfigMenu(tk.Tk):
                 file.write(str(self.__screenSize[1])+"\n")
             file.write(self.__graphics.get())
 
+class OneTimeSetup(ConfigMenu):
+    def __init__(self, title: str) -> None:
+        path = os.path.join(os.getcwd(), "config")
+
+        if not os.path.exists(path):
+            super().__init__(title)
+
 if __name__ == "__main__":
     ConfigMenu("Example Setup Box")
